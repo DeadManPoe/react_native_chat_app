@@ -1,14 +1,44 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import {GiftedChat} from 'react-native-gifted-chat';
 
 export default class App extends React.Component {
+  constructor(){
+    super();
+    this.state = {messages : []}
+  }
+  componentWillMount() {
+    this.setState({
+      messages: [
+        {
+          _id: 1,
+          text: 'Hello developer',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://facebook.github.io/react/img/logo_og.png',
+          },
+        },
+      ],
+    });
+  }
+
+  onSend(messages = []) {
+    this.setState((previousState) => ({
+      messages: GiftedChat.append(previousState.messages, messages),
+    }));
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={(messages) => this.onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+      />
     );
   }
 }
